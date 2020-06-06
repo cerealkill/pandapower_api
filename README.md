@@ -1,7 +1,15 @@
 # pandapower_api
 Http API endpoint for the pandapower library
 
-### Links
+### Running the tests
+These commands will run all the tests, static analysis, code audit and display coverage.
+
+Powered by [pytest](https://github.com/pytest-dev/pytest) test framework, [pylama](https://github.com/klen/pylama) code audit tool, and [coveragepy](https://github.com/nedbat/coveragepy).
+````shell script
+coverage run -m pytest --pylama
+coverage report
+````
+## Links
 * Pandapower [website](https://www.pandapower.org/)
 * Pandapower [docs](https://pandapower.readthedocs.io/en/v2.2.2/)
 * Pandapower [repo](https://github.com/e2nIEE/pandapower)

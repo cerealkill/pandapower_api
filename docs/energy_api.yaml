@@ -199,35 +199,35 @@ paths:
         - Energy
       summary: Get energy measurements of asset
       parameters:
-      - name: timeStart
-        in: query
-        description: Date in RFC 3339 format. ie. 2018-03-14T17:11:19+00:00
-        required: false
-        schema:
-          type: string
-          format: date-time
-      - name: timeEnd
-        in: query
-        description: Date in RFC 3339 format. ie. 2018-03-14T17:12:20+00:00
-        required: false
-        schema:
-          type: string
-          format: date-time
-      - name: accumulated
-        in: query
-        description: Set to True to get one accumulated measurement for the time frame. Note when the assets reports accumulated data, this is equal to the last reading withing the time frame and timeStart does not have an effect.
-        required: false
-        schema:
-          type: boolean
-          default: false
-      - name: limit
-        in: query
-        description: How many items to return at one time. -1 for no limit, TODO add pagination
-        required: false
-        schema:
-          type: integer
-          format: int32
-          default: 5
+        - name: timeStart
+          in: query
+          description: Date in RFC 3339 format. ie. 2018-03-14T17:11:19+00:00
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - name: timeEnd
+          in: query
+          description: Date in RFC 3339 format. ie. 2018-03-14T17:12:20+00:00
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - name: accumulated
+          in: query
+          description: Set to True to get one accumulated measurement for the time frame. Note when the assets reports accumulated data, this is equal to the last reading withing the time frame and timeStart does not have an effect.
+          required: false
+          schema:
+            type: boolean
+            default: false
+        - name: limit
+          in: query
+          description: How many items to return at one time. -1 for no limit, TODO add pagination
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 5
 
       responses:
         200:
