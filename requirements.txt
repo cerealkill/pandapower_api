@@ -1,0 +1,13 @@
+decorator==4.4.2
+llvmlite==0.32.1
+networkx==2.4
+numba==0.49.1
+numpy==1.18.5
+packaging==20.4
+pandapower==2.2.2
+pandas==1.0.4
+pyparsing==2.4.7
+python-dateutil==2.8.1
+pytz==2020.1
+scipy==1.4.1
+six==1.15.0

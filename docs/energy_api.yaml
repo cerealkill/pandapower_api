@@ -1,0 +1,359 @@
+openapi: 3.0.1
+info:
+  title: Energy Measurement API
+  description: Company name, project name, purpose of the api creation, date of last
+    update, sometimes code author name.
+  version: "3"
+servers:
+  - url: https://api.yourcompany.com/v3
+    description: replace with server endpoint
+security:
+  - basicAuth: []
+  - appID: []
+
+paths:
+  /asset:
+    post:
+      tags:
+        - Asset
+      summary: Create a new asset, returns asset id
+      parameters:
+        - in: query
+          name: role
+          required: true
+          description: Whether this assset is a producer or consumer
+          schema:
+            $ref: '#/components/schemas/AssetRole'
+        - in: query
+          name: manufacturer
+          schema:
+            type: string
+        - in: query
+          name: model
+          schema:
+            type: string
+        - in: query
+          name: serialNumber
+          schema:
+            type: string
+        - in: query
+          name: latitude
+          schema:
+            type: number
+        - in: query
+          name: longitude
+          schema:
+            type: number
+        - in: query
+          name: energyUnit
+          required: true
+          description: Warning Cannot be changed easily using PATCH
+          schema:
+            $ref: '#/components/schemas/EnergyUnit'
+        - in: query
+          name: isAccumulated
+          required: true
+          description: Whether this assset is reporting total measurement since beginning (true) or since previous measurement (false)
+          schema:
+            type: boolean
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Asset'
+          links:
+            GetAssetByID:
+              operationId: getAsset
+              parameters:
+                assetID: '$response.body#/id'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+        501:
+          $ref: '#/components/responses/NotImplemented'
+
+  /asset/{assetID}:
+    parameters:
+      - in: path
+        name: assetID
+        schema:
+          type: integer
+        required: true
+    get:
+      tags:
+        - Asset
+      summary: Get asset information by id
+      security: [] # No authentication
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Asset'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+        501:
+          $ref: '#/components/responses/NotImplemented'
+    patch:
+      tags:
+        - Asset
+      summary: Update asset information by id
+      parameters:
+        - in: query
+          name: manufacturer
+          schema:
+            type: string
+        - in: query
+          name: model
+          schema:
+            type: string
+        - in: query
+          name: serialNumber
+          schema:
+            type: string
+        - in: query
+          name: latitude
+          schema:
+            type: number
+        - in: query
+          name: longitude
+          schema:
+            type: number
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Asset'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+        501:
+          $ref: '#/components/responses/NotImplemented'
+    delete:
+      tags:
+        - Asset
+      summary: Delete an asset (and it's metering data)
+      responses:
+        200:
+          description: Success
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+        501:
+          $ref: '#/components/responses/NotImplemented'
+
+  /asset/{assetID}/energy:
+    parameters:
+      - in: path
+        name: assetID
+        schema:
+          type: integer
+        required: true
+    post:
+      tags:
+        - Energy
+      summary: Publish new energy measurement
+      parameters:
+        - in: query
+          name: energy
+          description: Registered in the asset energy unit
+          required: true
+          schema:
+            type: number
+        - in: query
+          name: measurementTime
+          description: Time of measurement in the device, in RFC 3339 format. ie. 2018-03-14T17:12:20+00:00
+          required: true
+          schema:
+            type: string
+            format: date-time
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Energy'
+        400:
+          $ref: '#/components/responses/BadRequestEnergy'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+        501:
+          $ref: '#/components/responses/NotImplemented'
+    get:
+      tags:
+        - Energy
+      summary: Get energy measurements of asset
+      parameters:
+      - name: timeStart
+        in: query
+        description: Date in RFC 3339 format. ie. 2018-03-14T17:11:19+00:00
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: timeEnd
+        in: query
+        description: Date in RFC 3339 format. ie. 2018-03-14T17:12:20+00:00
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: accumulated
+        in: query
+        description: Set to True to get one accumulated measurement for the time frame. Note when the assets reports accumulated data, this is equal to the last reading withing the time frame and timeStart does not have an effect.
+        required: false
+        schema:
+          type: boolean
+          default: false
+      - name: limit
+        in: query
+        description: How many items to return at one time. -1 for no limit, TODO add pagination
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 5
+
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Energy'
+        400:
+          $ref: '#/components/responses/BadRequestEnergy'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+        501:
+          $ref: '#/components/responses/NotImplemented'
+
+components:
+  schemas:
+
+    AssetRole:
+      type: string
+      enum:
+        - producer
+        - consumer
+
+    EnergyUnit:
+      type: string
+      enum:
+        - joule
+        - wattHour
+        - kilowattHour
+        - megawattHour
+        - gigawattHour
+
+    Asset:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          readOnly: true
+        role:
+          $ref: '#/components/schemas/AssetRole'
+        manufacturer:
+          type: string
+        model:
+          type: string
+        serial_number:
+          type: string
+        latitude:
+          type: number
+        longitude:
+          type: number
+        energy_unit:
+          $ref: '#/components/schemas/EnergyUnit'
+        is_accumulated:
+          type: boolean
+
+    Energy:
+      type: object
+      description: Energy measured at a certain time
+      properties:
+        energy:
+          type: number
+          description: Registered in Mega Watts
+        measurementTime:
+          type: string
+          description: Time of measurement in the device, in RFC 3339 format. ie. 2018-03-14T17:12:20+00:00
+          format: date-time
+
+    Error:
+      type: object
+      description: Error information
+      properties:
+        error:
+          type: string
+          description: The kind of error that occured
+        message:
+          type: string
+          description: Additional error information
+
+  responses:
+    Unauthorized:
+      description: 'Unauthorized: Check authorisation'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: 'Internal Server Error: Check error message for additional details.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotImplemented:
+      description: 'Not Implemented: The server does not have this message implemented.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: 'Bad Request: All required fields need to be set. | energyUnit needs to be a valid choice.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequestEnergy:
+      description: 'Bad Request: All required fields need to be set. | time needs to be valid dateTime string'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: 'Not Found: Asset with this id doesn`t exist'
+
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      x-basicInfoFunc: api.controller.authorization.check_basicAuth
+
+    appID:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      x-apikeyInfoFunc: api.controller.authorization.check_appID
