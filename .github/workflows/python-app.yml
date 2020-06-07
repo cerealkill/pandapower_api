@@ -1,0 +1,53 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: Python application
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.7
+    - name: Get pip cache dir
+      id: pip-cache
+      run: |
+        echo "::set-output name=dir::$(pip cache dir)"
+    - name: Dependencies cache
+      uses: actions/cache@v2
+      with:
+        path: ${{ steps.pip-cache.outputs.dir }}
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install wheel
+        pip install -r requirements.txt
+    - name: Download pytest cache
+      continue-on-error: true
+      uses: actions/download-artifact@v2
+      with:
+        name: pytest-cache
+        path: .pytest_cache
+    - name: Test with pytest and pylama
+      run: |
+        coverage run -m pytest --pylama
+    - name: Show coverage report
+      run: |
+        coverage report
+    - name: Upload pytest cache
+      uses: actions/upload-artifact@v2
+      with:
+        name: pytest-cache
+        path: .pytest_cache
