@@ -43,3 +43,6 @@ class SimulationController:
         if not self._reactive_load:
             raise Exception('Please run simulation first.')
         return self._reactive_load
+
+
+controller = SimulationController()
