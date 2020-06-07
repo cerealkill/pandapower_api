@@ -1,6 +1,6 @@
 import unittest
 
-from api.controller import SimulationController
+from django_app.controller import SimulationController
 
 
 class SimulationControllerTest(unittest.TestCase):
