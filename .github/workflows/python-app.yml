@@ -36,9 +36,19 @@ jobs:
         python -m pip install --upgrade pip
         pip install wheel
         pip install -r requirements.txt
+    - name: Download pytest cache
+      uses: actions/download-artifact@v2
+      with:
+        name: pytest-cache
+        path: .pytest_cache
     - name: Test with pytest and pylama
       run: |
         coverage run -m pytest --pylama
     - name: Show coverage report
       run: |
         coverage report
+    - name: Upload pytest cache
+      uses: actions/upload-artifact@v2
+      with:
+        name: pytest-cache
+        path: .pytest_cache
