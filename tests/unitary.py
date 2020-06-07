@@ -1,7 +1,5 @@
 import unittest
 
-import pytest
-
 from api.controller import SimulationController
 
 
