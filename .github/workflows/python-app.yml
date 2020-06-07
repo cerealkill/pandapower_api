@@ -32,9 +32,9 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-pip-
     - name: Install dependencies
-      if: steps.dependencies-cache.outputs.cache-hit != 'true'
       run: |
         python -m pip install --upgrade pip
+        pip install wheel
         pip install -r requirements.txt
     - name: Test with pytest and pylama
       run: |
