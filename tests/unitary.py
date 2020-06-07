@@ -1,8 +1,8 @@
+import json
 import unittest
 
-import pytest
-
 from api.controller import SimulationController
+from api.server import rest
 
 
 class SimulationControllerTest(unittest.TestCase):
@@ -30,3 +30,37 @@ class SimulationControllerTest(unittest.TestCase):
     def test_get_reactive_load(self):
         self.controller.run_simulation()
         self.assertEqual(self.controller.reactive_load, 0.05)
+
+
+class RestAPIv1Test(unittest.TestCase):
+
+    def setUp(self):
+        rest.config['TESTING'] = True
+        self.app = rest.test_client()
+
+    def test_hello_world(self):
+        helloworld = self.app.get('/')
+        self.assertEqual(helloworld.status_code, 200)
+        self.assertEqual(helloworld.json, {"Hello": "World!"})
+
+    def test_echo(self):
+        helloworld = self.app.post('/echo', data=json.dumps({'Hello': 'Again!'}))
+        self.assertEqual(helloworld.status_code, 200)
+        self.assertEqual(helloworld.json, {"Hello": "Again!"})
+
+    def test_run_simulation(self):
+        simulation_res = self.app.post('/api/v1/run')
+        self.assertEqual(simulation_res.status_code, 200)
+        self.assertEqual(simulation_res.json, {'simulation_results': {'active_load': 0.1, 'reactive_load': 0.05}})
+
+    def test_get_active_load(self):
+        self.app.post('/api/v1/run')
+        simulation_res = self.app.get('/api/v1/load/active')
+        self.assertEqual(simulation_res.status_code, 200)
+        self.assertEqual(simulation_res.json, {'simulation_results': {'active_load': 0.1}})
+
+    def test_get_reactive_load(self):
+        self.app.post('/api/v1/run')
+        simulation_res = self.app.get('/api/v1/load/reactive')
+        self.assertEqual(simulation_res.status_code, 200)
+        self.assertEqual(simulation_res.json, {'simulation_results': {'reactive_load': 0.05}})

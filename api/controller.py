@@ -33,13 +33,16 @@ class SimulationController:
         return self._active_load, self._reactive_load
 
     @property
-    def active_load(self):
+    def active_load(self) -> float:
         if not self._active_load:
             raise Exception('Please run simulation first.')
         return self._active_load
 
     @property
-    def reactive_load(self):
+    def reactive_load(self) -> float:
         if not self._reactive_load:
             raise Exception('Please run simulation first.')
         return self._reactive_load
+
+
+controller = SimulationController()
