@@ -9,7 +9,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 gunicorn -w 4 -b 0.0.0.0:80 api.server:rest
 ```
-Use curl or httpie to check if it works, I like [Insomnia.rest](https://insomnia.rest/download).
+Use curl or httpie to check if it works, I like [Insomnia.rest](https://insomnia.rest/download). Import the Insomnia Workspace from the `docs/` folder to hit the ground running!
 ````shell script
 curl 127.0.0.1
 http 127.0.0.1
