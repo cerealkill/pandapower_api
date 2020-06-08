@@ -12,7 +12,19 @@ class SimulationController:
     def __init__(self):
         self._active_load, self._reactive_load = None, None
 
-    def run_simulation(self) -> (float, float):
+    def run_simulation(self, active_load=0.1, reactive_load=0.05) -> (float, float):
+        """
+        Runs the Pandaspower simulation with 3 buses, a 0.4 MVA 20/0.4 kV transformer, and an external grid connection.
+        :param active_load: Grid active load in megawatts. Default is 0.1.
+        :param reactive_load: Grid reactive load in megawatts. Default is 0.05.
+        :return: Resulting active and reactive grid load.
+        """
+        # fallback parameters
+        if not active_load:
+            active_load = 0.1
+        if not reactive_load:
+            reactive_load = 0.05
+
         # create empty net
         net = pp.create_empty_network()
 
@@ -23,7 +35,7 @@ class SimulationController:
 
         # create bus elements
         pp.create_ext_grid(net, bus=b1, vm_pu=1.02, name="Grid Connection")
-        pp.create_load(net, bus=b3, p_mw=0.1, q_mvar=0.05, name="Load")
+        pp.create_load(net, bus=b3, p_mw=active_load, q_mvar=reactive_load, name="Load")
 
         # create branch elements
         pp.create_transformer(net, hv_bus=b1, lv_bus=b2, std_type="0.4 MVA 20/0.4 kV", name="Trafo")
