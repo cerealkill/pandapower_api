@@ -15,8 +15,8 @@ curl 127.0.0.1/api/v1/load/reactive
 ````
 
 ## Continuous integrations
-* Build and test pipeline on Github for all commits
-* Dockerhub build updates `latest` tag for changes on the `master` branch
+* Build and test pipeline on [Github Actions](https://github.com/cerealkill/pandapower_api/actions) for all commits
+* Dockerhub [automated builds](https://hub.docker.com/repository/docker/pauldepraz/pandapowerapi/builds) will update the `latest` tag for changes on the `master` branch
 
 ## Running on a local machine
 Run on the already installed Gunicorn wsgi server.
