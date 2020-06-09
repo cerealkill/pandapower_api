@@ -1,14 +1,16 @@
-# REST API for Pandapower Simulations
-Http API endpoint for the pandapower library
+# Grid load simulation API
+![Build badge](https://github.com/cerealkill/pandapower_api/workflows/tests/badge.svg)![coverage badge](docs/coverage.svg)![issues badge](https://img.shields.io/github/issues/cerealkill/pandapower_api?style=flat-square)![license badge](https://img.shields.io/github/license/cerealkill/pandapower_api?style=flat-square)
+
+Grid load simulation REST API based on Pandapower
 
 ```shell script
 docker run -p 80:80 pauldepraz/pandapowerapi
 ```
-Once running click [here](http://127.0.0.1/api/spec.html#!/spec) to ccess the Swagger UI to interact with the API.
+Once running click [here](http://127.0.0.1/api/spec.html#!/spec) to access the Swagger UI to interact with the API.
 
-Altenativelly, interact with the API use [Insomnia.rest](https://insomnia.rest/download) and import the Insomnia Workspace from the `docs/` folder to hit the ground running!
+Alternatively, interact with the API use [Insomnia.rest](https://insomnia.rest/download) and import the Insomnia Workspace from the `docs/` folder to hit the ground running!
 
-Alternativelly, use curl or httpie on the cmd.
+Alternatively, use curl or httpie on the cmd.
 ````shell script
 http 127.0.0.1/api/v1/simulations
 http 127.0.0.1/api/v1/simulation/0/load/active
@@ -44,7 +46,7 @@ These commands will run all the tests, static analysis, code audit and display c
 
 Powered by [pytest](https://github.com/pytest-dev/pytest) test framework, [pylama](https://github.com/klen/pylama) code audit tool, and [coveragepy](https://github.com/nedbat/coveragepy).
 ````shell script
-coverage run -m pytest --pylama && coverage report
+coverage run -m pytest --pylama && coverage report && coverage-badge -o docs/coverage.svg
 ````
 
 ### Building a Docker container

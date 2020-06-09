@@ -2,6 +2,7 @@ aniso8601==8.0.0
 attrs==19.3.0
 click==7.1.2
 coverage==5.1
+coverage-badge==1.0.1
 decorator==4.4.2
 Flask==1.1.2
 Flask-RESTful==0.3.8
