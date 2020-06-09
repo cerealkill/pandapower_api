@@ -4,19 +4,29 @@ Http API endpoint for the pandapower library
 ```shell script
 docker run -p 80:80 pauldepraz/pandapowerapi
 ```
+Once running click [here](http://127.0.0.1/api/spec.html#!/spec) to ccess the Swagger UI to interact with the API.
 
-To interact with API use [Insomnia.rest](https://insomnia.rest/download) and import the Insomnia Workspace from the `docs/` folder to hit the ground running!
+Altenativelly, interact with the API use [Insomnia.rest](https://insomnia.rest/download) and import the Insomnia Workspace from the `docs/` folder to hit the ground running!
 
 Alternativelly, use curl or httpie on the cmd.
 ````shell script
-curl 127.0.0.1/api/v1/run
-curl 127.0.0.1/api/v1/load/active
-curl 127.0.0.1/api/v1/load/reactive
+http 127.0.0.1/api/v1/simulations
+http 127.0.0.1/api/v1/simulation/0/load/active
+http 127.0.0.1/api/v1/simulation/0/load/reactive
+http post 127.0.0.1/api/v1/simulations
+http 127.0.0.1/api/v1/simulation/1
+http delete 127.0.0.1/api/v1/simulation/0
+http 127.0.0.1/api/v1/simulation/0
+http post 127.0.0.1/api/v1/simulations active=0.6 reactive=0.9
+http post 127.0.0.1/api/v1/simulations active=0.2 reactive=0.01
+http put 127.0.0.1/api/v1/simulation/2 active=0.2 reactive=0.05
+http 127.0.0.1/api/v1/simulation/2/load/active
+http 127.0.0.1/api/v1/simulation/2/load/reactive
 ````
 
 ## Continuous integrations
-* Build and test pipeline on Github for all commits
-* Dockerhub build updates `latest` tag for changes on the `master` branch
+* Build and test pipeline on [Github Actions](https://github.com/cerealkill/pandapower_api/actions) for all commits
+* Dockerhub [automated builds](https://hub.docker.com/repository/docker/pauldepraz/pandapowerapi/builds) will update the `latest` tag for changes on the `master` branch
 
 ## Running on a local machine
 Run on the already installed Gunicorn wsgi server.
