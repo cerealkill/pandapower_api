@@ -15,4 +15,8 @@
 ### WSGI Server
 * Used [Gunicorn](https://gunicorn.org/) that is shipped in the Python package manager and is pretty solid, can use multiple workers and other nice features. That is what I used for scaling apis in the past.
 
-## 
+## Swagger
+* Used [Flask-restful-swagger](https://github.com/rantav/flask-restful-swagger)
+
+## Docker
+* Used Debian based because I couldn't find the Alpine libraries I needed to compile pandapower. This makes the container a bit larger.

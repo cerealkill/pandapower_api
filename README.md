@@ -4,8 +4,9 @@ Http API endpoint for the pandapower library
 ```shell script
 docker run -p 80:80 pauldepraz/pandapowerapi
 ```
+Once running click [here](http://127.0.0.1/api/spec.html#!/spec) to ccess the Swagger UI to interact with the API.
 
-To interact with API use [Insomnia.rest](https://insomnia.rest/download) and import the Insomnia Workspace from the `docs/` folder to hit the ground running!
+Altenativelly, interact with the API use [Insomnia.rest](https://insomnia.rest/download) and import the Insomnia Workspace from the `docs/` folder to hit the ground running!
 
 Alternativelly, use curl or httpie on the cmd.
 ````shell script
