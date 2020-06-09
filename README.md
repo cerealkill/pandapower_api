@@ -1,5 +1,5 @@
 # Grid load simulation API
-![Build badge](https://github.com/cerealkill/pandapower_api/workflows/tests/badge.svg)![coverage badge](docs/coverage.svg)![issues badge](https://img.shields.io/github/issues/cerealkill/pandapower_api?style=flat-square)![license badge](https://img.shields.io/github/license/cerealkill/pandapower_api?style=flat-square)
+![Build badge](https://github.com/cerealkill/pandapower_api/workflows/tests/badge.svg)![coverage badge](docs/coverage.svg)![issues badge](https://img.shields.io/github/issues/cerealkill/pandapower_api?style=flat)![license badge](https://img.shields.io/github/license/cerealkill/pandapower_api?style=flat)
 
 Grid load simulation REST API based on Pandapower
 
