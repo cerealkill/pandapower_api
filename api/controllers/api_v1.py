@@ -1,5 +1,6 @@
 from flask_restful import reqparse, abort, Resource
 from flask_restful_swagger import swagger
+from pandapower import ppException
 
 from api.controllers.simulation import SimulationController
 
@@ -17,6 +18,12 @@ simulations = {
 def abort_if_doesnt_exist(sim_id):
     if sim_id not in simulations:
         abort(404, message="Simulation of id {}  doesn't exist".format(sim_id))
+
+
+def simulate_and_store(active_load, reactive_load, sim_id):
+    pp_sim = SimulationController()
+    results = pp_sim.run_simulation(active_load, reactive_load)
+    simulations[sim_id] = {'results': {'load': {'active': results[0], 'reactive': results[1]}}, 'id': sim_id}
 
 
 class Simulation(Resource):
@@ -63,16 +70,21 @@ class Simulation(Resource):
             {
                 "code": 404,
                 "message": "Simulation with provided ID was not found."
-            }
+            },
+            {
+                "code": 417,
+                "message": "Simulation failed. See error message in response body."
+            },
         ]
     )
     def put(self, sim_id):
         args = parser.parse_args()
         active_load, reactive_load = args['active'], args['reactive']
-        pp_sim = SimulationController()
-        results = pp_sim.run_simulation(active_load, reactive_load)
-        simulations[sim_id] = {'results': {'load': {'active': results[0], 'reactive': results[1]}}, 'id': sim_id}
-        return simulations[sim_id], 201
+        try:
+            simulate_and_store(active_load, reactive_load, sim_id)
+            return simulations[sim_id], 201
+        except ppException as e:
+            return {'error': str(e)}, 417
 
 
 class SimulationList(Resource):
@@ -93,6 +105,10 @@ class SimulationList(Resource):
                 "message": "Malformed body. Active and Reactive load must be floating points."
             },
             {
+                "code": 417,
+                "message": "Simulation failed. See error message in response body."
+            },
+            {
                 "code": 201,
                 "message": "Created. Simulation ID is in the message body."
             }
@@ -101,12 +117,13 @@ class SimulationList(Resource):
     def post(self):
         args = parser.parse_args()
         active_load, reactive_load = args['active'], args['reactive']
-        pp_sim = SimulationController()
-        results = pp_sim.run_simulation(active_load, reactive_load)
-        sim_id = str(int(max(simulations.keys())) + 1) if len(simulations) > 0 else '0'
-        simulations[sim_id] = {'results': {'load': {'active': results[0], 'reactive': results[1]}}, 'id': sim_id}
-        # TODO: Add response resource location header
-        return simulations[sim_id], 201
+        try:
+            sim_id = str(int(max(simulations.keys())) + 1) if len(simulations) > 0 else '0'
+            simulate_and_store(active_load, reactive_load, sim_id)
+            # TODO: Add response resource location header
+            return simulations[sim_id], 201
+        except ppException as e:
+            return {'error': str(e)}, 417
 
 
 class Load(Resource):

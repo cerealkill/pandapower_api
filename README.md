@@ -9,9 +9,18 @@ To interact with API use [Insomnia.rest](https://insomnia.rest/download) and imp
 
 Alternativelly, use curl or httpie on the cmd.
 ````shell script
-curl 127.0.0.1/api/v1/run
-curl 127.0.0.1/api/v1/load/active
-curl 127.0.0.1/api/v1/load/reactive
+http 127.0.0.1/api/v1/simulations
+http 127.0.0.1/api/v1/simulation/0/load/active
+http 127.0.0.1/api/v1/simulation/0/load/reactive
+http post 127.0.0.1/api/v1/simulations
+http 127.0.0.1/api/v1/simulation/1
+http delete 127.0.0.1/api/v1/simulation/0
+http 127.0.0.1/api/v1/simulation/0
+http post 127.0.0.1/api/v1/simulations active=0.6 reactive=0.9
+http post 127.0.0.1/api/v1/simulations active=0.2 reactive=0.01
+http put 127.0.0.1/api/v1/simulation/2 active=0.2 reactive=0.05
+http 127.0.0.1/api/v1/simulation/2/load/active
+http 127.0.0.1/api/v1/simulation/2/load/reactive
 ````
 
 ## Continuous integrations

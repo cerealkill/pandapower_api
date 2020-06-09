@@ -19,16 +19,16 @@ class SimulationControllerTest(unittest.TestCase):
             self.controller.reactive_load
 
     def test_run_simulation(self):
-        active_load, reactive_load = self.controller.run_simulation()
+        active_load, reactive_load = self.controller.simulate_and_store()
         self.assertEqual(active_load, 0.1)
         self.assertEqual(reactive_load, 0.05)
 
     def test_get_active_load(self):
-        self.controller.run_simulation()
+        self.controller.simulate_and_store()
         self.assertEqual(self.controller.active_load, 0.1)
 
     def test_get_reactive_load(self):
-        self.controller.run_simulation()
+        self.controller.simulate_and_store()
         self.assertEqual(self.controller.reactive_load, 0.05)
 
 
