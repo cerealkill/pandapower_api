@@ -2,7 +2,7 @@
 
 ### Strategy & Project Organizaiton
 * Plan a first release features using Github's [Kanban](https://github.com/cerealkill/pandapower_api/projects/1).
-* Plan a first release features using Github's [Kanban](https://github.com/cerealkill/pandapower_api/projects/1).
+* All features I didnt have time to implement on this [Kanban](https://github.com/cerealkill/pandapower_api/projects/2).
 * Test-Driven Development approach to technical features, so test first, implement next.
 * Use [Github](https://github.com/cerealkill/pandapower_api/actions) Continuous Integrations tools to automate build and test.
 * Use [Dockerhub](https://hub.docker.com/repository/docker/pauldepraz/pandapowerapi/builds) Continuous Integrations tools to automate deployment and distribution.
