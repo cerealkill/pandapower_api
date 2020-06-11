@@ -36,7 +36,7 @@ Run on the already installed Gunicorn wsgi server.
 virutalenv -p python3 venv
 source venv/bin/activate
 pip install -r requirements.txt
-gunicorn -w 4 -b 0.0.0.0:80 api.server:rest
+gunicorn -b 0.0.0.0:80 api.server:rest
 ```
 
 For wsgi alternatives check Flask documentation [here](https://flask.palletsprojects.com/en/1.1.x/deploying/wsgi-standalone/).
