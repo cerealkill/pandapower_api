@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  pandapowerapi:
+    image: pauldepraz/pandapowerapi
+    restart: always
+    ports:
+      - '3000:80'
+    deploy:
+      replicas: 3
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          cpus: "0.8"
+          memory: 1G
